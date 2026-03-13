@@ -1,0 +1,72 @@
+<script>
+  function toggleSwitch(el) {
+    el.classList.toggle('active');
+  }
+
+
+function abrirSoliCosteo() {
+  google.script.run.showSoliCosteo();
+}
+
+
+<script>
+  function refrescarTabla() {
+    google.script.run
+      .withSuccessHandler(function(datos) {
+        // Aquí tendrías que reconstruir la tabla con JavaScript puro
+        // O más fácil: recargar todo el modal (menos elegante)
+        console.log("Datos nuevos:", datos);
+        // Opción simple: location.reload();  // ← recarga el modal
+      })
+      .getDatosActualizados();
+  }
+
+  // Opcional: refrescar cada 30 segundos
+  // setInterval(refrescarTabla, 30000);
+</script>
+
+
+<script>
+  function refrescarTabla() {
+    google.script.run
+      .withSuccessHandler(function(datos) {
+        const tbody = document.querySelector("#tablaCotizaciones tbody");
+        tbody.innerHTML = ""; // limpiar
+
+        if (datos && datos.length > 0) {
+          datos.forEach(cot => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${cot.numero}</td>
+              <td class="table-number">${cot.idcot}</td>
+              <td>${cot.timestamp || '—'}</td>
+              <td style="max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" 
+                  title="${cot.titulo}">
+                ${cot.titulo || 'Sin título'}
+              </td>
+              <td class="table-number">${cot.idcon || '—'}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+        } else {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td colspan="5" style="text-align:center; padding:30px; color:#ff6b6b;">
+            No hay cotizaciones en la hoja "Enc" (o solo encabezados)
+          </td>`;
+          tbody.appendChild(tr);
+        }
+      })
+      .getDatosActualizados();
+  }
+
+  // refrescar cada 30 segundos
+  setInterval(refrescarTabla, 30000);
+</script>
+
+
+
+</script>
+
+
+<!-- ============= FIN DE ARCHIVO Javas.html =============  -->
+
