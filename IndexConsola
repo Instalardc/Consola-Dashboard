@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+
+<style>
+
+
+
+  <?!= include('Styles'); ?>
+
+
+
+<style>
+
+
+</head>
+
+<?!= incluirEncabezado(); ?>
+
+<body>
+
+  <!-- Circuit nodes -->
+  <div class="circuit-node" style="top:10%;left:15%;"></div>
+  <div class="circuit-node" style="top:30%;left:8%;animation-delay:1s;"></div>
+  <div class="circuit-node" style="top:60%;left:12%;animation-delay:2s;"></div>
+  <div class="circuit-node" style="top:80%;right:20%;animation-delay:.5s;"></div>
+  <div class="circuit-node" style="top:25%;right:15%;animation-delay:1.5s;"></div>
+  <div class="circuit-node" style="top:70%;right:8%;animation-delay:2.5s;"></div>
+
+  <!-- LAYOUT PRINCIPAL -->
+  <div style="display:flex; height:100vh; overflow:hidden;">
+
+    <!-- ══ SIDEBAR ══ -->
+    <div class="sidebar-glow"
+      style="width:140px; min-width:140px; flex-shrink:0; display:flex; flex-direction:column; gap:6px; padding:8px; overflow-y:auto;">
+
+      <div class="header-subtitle"
+        style="text-align:center; padding:4px 0 8px; border-bottom:1px solid rgba(0,242,255,.2); margin-bottom:4px;">
+        MENÚ
+      </div>
+            <div class="btn-neon btn-gold" onclick="abrirModulo('bitacora')">✏️ Bitácora</div>
+      <div class="btn-neon btn-purple" onclick="showCapturadorModal()">📋 Captura</div>
+      <div class="btn-neon btn-yellow" onclick="abrirSoliCosteo()">📤 Soli. Costeo</div>
+      <div class="btn-neon btn-cyan" onclick="abrirModulo('emitir')">📄 Emitir</div>
+      <div class="btn-neon btn-magenta" onclick="abrirModulo('solCosteo')">📤 Sol. Costeo</div>
+      <div class="btn-neon btn-green" onclick="abrirModulo('solFactura')">🧾 Sol. Factura</div>
+      <div class="btn-neon btn-red" onclick="abrirModulo('captCosto')">🔧 Capt. Costo</div>
+    </div>
+
+    <!-- ══ CONTENIDO PRINCIPAL ══ -->
+    <div style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
+
+      <!-- Header -->
+      <div class="header">
+        <div>
+          <div class="logo-3d">
+            <div class="logo-metal-texture">
+              <span>D</span><span>A</span><span>S</span><span>H</span><span>B</span><span>O</span><span>A</span><span>R</span><span>D</span><span>🦊</span>
+            </div>
+          </div>
+          <div class="header-subtitle">Sistema VRGS</div>
+        </div>
+
+        
+        <div class="header-badge">
+          <span class="dot"></span>
+          <span>Sistema Activo</span>
+        </div>
+      </div>
+
+      <!-- Main scrollable -->
+      <main style="flex:1; overflow-y:auto; padding:10px; display:flex; flex-direction:column; gap:10px;">
+
+        <!-- KPI Cards -->
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px;">
+
+          <div class="glass kpi-card kpi-blue">
+            <div class="kpi-label">Actividad</div>
+            <div class="kpi-value">87%</div>
+            <div class="mini-chart">
+              <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#00f2ff;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#00ff88;stop-opacity:1" />
+                  </linearGradient>
+                </defs>
+                <path d="M 0 50 L 40 45 L 80 35 L 120 30 L 160 25 L 200 20" stroke="url(#lineGradient)" stroke-width="3"
+                  fill="none" stroke-linecap="round" />
+                <circle cx="200" cy="20" r="5" fill="#00ff88">
+                  <animate attributeName="r" values="5;7;5" dur="2s" repeatCount="indefinite" />
+                </circle>
+              </svg>
+            </div>
+          </div>
+
+          <div class="glass kpi-card kpi-purple">
+            <div class="kpi-label">Conversión</div>
+            <div class="kpi-value">2255</div>
+            <div class="progress-container">
+              <div class="progress-bar" style="width:65%;"></div>
+            </div>
+          </div>
+
+          <div class="glass kpi-card kpi-green">
+            <div class="kpi-label">Pendientes</div>
+            <div class="kpi-value">4789</div>
+          </div>
+
+        </div>
+
+
+
+
+
+<div style="color:cyan; margin-bottom:8px;">
+  Filas encontradas: <?= cotizacionesReales ? cotizacionesReales.length : 'UNDEFINED' ?>
+</div>
+
+<div class="glass" style="flex:1;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+    <div style="font-family:'Orbitron',sans-serif; font-size:11px; color:var(--c-blue); letter-spacing:1px;">
+      COTIZACIONES RECIENTES (Enc A-D)
+    </div>
+    <!-- Botón refrescar con estilo neón -->
+    <div class="btn-neon btn-rose" onclick="refrescarTabla()">🔄 Refrescar</div>
+  </div>
+  
+  <table id="tablaCotizaciones" class="data-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>ID Cot</th>
+        <th>Fecha / Hora</th>
+        <th>Título</th>
+        <th>ID Con</th>
+      </tr>
+    </thead>
+    <tbody>
+      <? if (cotizacionesReales && cotizacionesReales.length > 0) { ?>
+        <? for (var i = 0; i < cotizacionesReales.length; i++) { 
+             var cot = cotizacionesReales[i]; ?>
+          <tr>
+            <td><?= cot.numero ?></td>
+            <td class="table-number"><?= cot.idcot ?></td>
+            <td><?= cot.timestamp || '—' ?></td>
+            <td style="max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" 
+                title="<?= cot.titulo ?>">
+              <?= cot.titulo || 'Sin título' ?>
+            </td>
+            <td class="table-number"><?= cot.idcon || '—' ?></td>
+          </tr>
+        <? } ?>
+      <? } else { ?>
+        <tr>
+          <td colspan="5" style="text-align:center; padding:30px; color:#ff6b6b;">
+            No hay cotizaciones en la hoja "Enc" (o solo encabezados)
+          </td>
+        </tr>
+      <? } ?>
+    </tbody>
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    function showCapturadorModal() {
+      google.script.run.showCapturadorModal();
+    }
+    function abrirModulo(mod) {
+      // placeholder para los demás módulos
+      console.log('módulo:', mod);
+    }
+  </script>
+
+  <?!= include('JavasConsola'); ?>
+</body>
+
+</html>
